@@ -1,4 +1,5 @@
 import { registerRootComponent } from 'expo';
+import * as firebase from 'firebase';
 
 import App from './App';
 

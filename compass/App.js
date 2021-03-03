@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 
+import firebaseConfig from "./firebaseConfig";
+
 import HomeScreen from '../compass/src/pages/HomeScreen'
 
 const AppNavigator = createStackNavigator({
