@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>624907116444-c6ba4st96kkblnac7safgb4em2038gte.apps.googleusercontent.com</string>
+	<string>657267396684-ntj13p370u8iltjg0f3g67krq1gr4140.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.624907116444-c6ba4st96kkblnac7safgb4em2038gte</string>
+	<string>com.googleusercontent.apps.657267396684-ntj13p370u8iltjg0f3g67krq1gr4140</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAq5KPxjdbf_Qu9OKKOJJTgmg_TtTDPxT8</string>
+	<string>AIzaSyCsjFMIUNg3ZfkGhx4045X19C9d8DiJsRU</string>
 	<key>GCM_SENDER_ID</key>
-	<string>624907116444</string>
+	<string>657267396684</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.compass</string>
+	<string>compass.app</string>
 	<key>PROJECT_ID</key>
-	<string>compass-ba103</string>
+	<string>compassapp-40995</string>
 	<key>STORAGE_BUCKET</key>
-	<string>compass-ba103.appspot.com</string>
+	<string>compassapp-40995.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:624907116444:ios:d81a14f6b1f551f978b259</string>
+	<string>1:657267396684:ios:7652c9a28a83076e3424e9</string>
+	<key>DATABASE_URL</key>
+	<string>https://compassapp-40995-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>
