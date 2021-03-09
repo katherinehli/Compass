@@ -22,4 +22,5 @@ target 'compass' do
   #    flipper_post_install(installer)
   #  end
   pod 'Firebase/Analytics'
+  # pod 'React-ART', :path => '../node_modules/react-native/Libraries/ART'
 end
