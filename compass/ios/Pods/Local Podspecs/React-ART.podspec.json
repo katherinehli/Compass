@@ -1,0 +1,28 @@
+{
+  "name": "React-ART",
+  "version": "0.63.4",
+  "summary": "A library for drawing vector graphics.",
+  "homepage": "https://reactnative.dev/",
+  "license": "MIT",
+  "authors": "Facebook, Inc. and its affiliates",
+  "platforms": {
+    "ios": "10.0",
+    "tvos": "10.0"
+  },
+  "source": {
+    "git": "https://github.com/facebook/react-native.git",
+    "tag": "v0.63.4"
+  },
+  "source_files": "**/*.{m}",
+  "preserve_paths": [
+    "package.json",
+    "LICENSE",
+    "LICENSE-docs"
+  ],
+  "header_dir": "ART",
+  "dependencies": {
+    "React-Core/ARTHeaders": [
+      "0.63.4"
+    ]
+  }
+}
