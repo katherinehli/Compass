@@ -224,7 +224,7 @@ export default class HomeScreen extends React.Component {
                     </TouchableOpacity>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around', padding: 15}}>
                         <View>
-                            <Text style={{marginBottom: 15}}>Liquor consumed</Text>
+                            <Text style={{marginBottom: 15}}>Alcohol consumed</Text>
                             <ProgressCircle
                                 percent={this.state.amountPercent}
                                 radius={60}
@@ -342,7 +342,7 @@ export default class HomeScreen extends React.Component {
                         </View>
                     }
                     <View style={{alignItems: 'center', marginBottom: 10}}>
-                        <Text style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>minutes ago</Text>
+                        <Text style={{fontStyle: 'italic', justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>minutes ago</Text>
 
                     </View>
                      <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
