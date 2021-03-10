@@ -76,11 +76,11 @@ export default class HomeScreen extends React.Component {
     }
 
     async retrieveTimeUntilLimit (){
-        console.warn("hi in retrievetimeuntillimit")
+        // console.warn("hi in retrievetimeuntillimit")
         let taro = await db.ref(`/user_data`).get();
         let taro0 = JSON.parse(JSON.stringify(taro))
         let estimated_time_left = this.retrieveDocumentName('estimated_time_left', taro0).estimated_time_left
-        console.warn(estimated_time_left)
+        // console.warn(estimated_time_left)
         return estimated_time_left
         
     }
@@ -105,7 +105,7 @@ export default class HomeScreen extends React.Component {
     }
 
     async formatTimestamps(){
-        console.warn("hi in retrieve pure alc")
+        console.warn("hi in format timestamps")
         let data = await db.ref(`/log_data_test01`).get();
         // console.warn("data is: ", data)
         data0 = JSON.parse(JSON.stringify(data))
@@ -117,7 +117,7 @@ export default class HomeScreen extends React.Component {
         var timestamps = [];
         for(i = 0; i < dataArray.length; i++) {
             if("min_from_start" in dataArray[i]){
-                // console.warn(dataArray[i].min_from_start)
+                console.warn(dataArray[i].min_from_start)
                 timestamps.push(dataArray[i].min_from_start)
             }
         }
@@ -126,10 +126,11 @@ export default class HomeScreen extends React.Component {
         timestamps.forEach(item => {
             let temp = moment().subtract(item, 'minutes').format('h:mm');
             times.push(temp);
-            console.warn(temp)
+            // console.warn(temp)
         });
         
         console.warn(times)
+        this.setState({timestamps: times.reverse()})
         return times
     }
 
@@ -157,7 +158,7 @@ export default class HomeScreen extends React.Component {
     async retrieveBeverage() {
         console.warn("hi in retrieve beverage")
         let data = await db.ref(`/log_data_test01`).get();
-        // console.warn("data is: ", data)
+        console.warn("data is: ", data)
         data0 = JSON.parse(JSON.stringify(data))
         var dataArray = [];
         for(var o in data0) {
@@ -167,7 +168,7 @@ export default class HomeScreen extends React.Component {
         var beverage = [];
         for(i = 0; i < dataArray.length; i++) {
             if('accumulated_amount_b' in dataArray[i]){
-                console.warn(dataArray[i].accumulated_amount_b)
+                // console.warn(dataArray[i].accumulated_amount_b)
                 beverage.push(dataArray[i].accumulated_amount_b)
             }
         }
@@ -175,10 +176,10 @@ export default class HomeScreen extends React.Component {
     }
 
     async retrieveLiquorLimits () {
-        console.warn("hi in retrieve retreive liquor limits")
+        // console.warn("hi in retrieve liquor limits")
         let taro = await db.ref(`/user_data`).get();
         let taro0 = JSON.parse(JSON.stringify(taro))
-        console.warn(taro0)
+        // console.warn(taro0)
         let current_amount = this.retrieveDocumentName("current_amount", taro0).current_amount
         let limit_amount = this.retrieveDocumentName("limit_amount", taro0).limit_amount
 
@@ -189,7 +190,7 @@ export default class HomeScreen extends React.Component {
 
         let pacePercent = current_pace/max_pace
 
-        console.warn(amountPercent, pacePercent)
+        // console.warn(amountPercent, pacePercent)
         this.setState({
             current_amount: current_amount,
             limit_amount: limit_amount,
@@ -206,8 +207,7 @@ export default class HomeScreen extends React.Component {
             <SafeAreaView style={styles.container}>
                 <View style={{ alignContent: 'center', justifyContent: 'center', padding: 10}}>
                     <Text style={styles.title}>Dashboard</Text>
-                    <Text style={styles.selectBeverage}>Select a beverage:</Text>
-                    {/* <AlcoholVisualBar beer={5} wine={3} whiskey={0}/> */}
+                    <Text style={styles.selectBeverage}>Choose a beverage:</Text>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                         <TouchableOpacity onPress={() => this.selectBeverage("beer")}>
                             <Ionicon name="beer" size={50} color={(this.state.selected == "beer") ? "pink" : "black"}/>
@@ -250,7 +250,7 @@ export default class HomeScreen extends React.Component {
                             </ProgressCircle>
                         </View>
                     </View>
-                    <View style={{alignContent: 'center', justifyContent: 'center', alignItems: 'center'}}>
+                    <View style={{alignContent: 'center', justifyContent: 'center', alignItems: 'center', marginBottom: -5}}>
                         <View style={{flexDirection: 'row', alignItems: 'center' }}>
                             <Text>Estimated </Text>
                             <Text style={{fontSize: 40}}>{this.state.timeUntilLimit} minutes</Text>
@@ -280,7 +280,7 @@ export default class HomeScreen extends React.Component {
                     {
                         (this.state.chartFormat == "pureAlc")?
                         <View>
-                            <View style={{ height: 380, width: 380, flexDirection: 'row', alignSelf: 'center' }}>
+                            <View style={{ height: 350, width: 350, flexDirection: 'row', alignSelf: 'center' }}>
                                 <YAxis
                                     data={this.state.pureAlc}
                                     contentInset={{ top: 20, bottom: 20 }}
@@ -305,32 +305,46 @@ export default class HomeScreen extends React.Component {
                                 data={this.state.timestamps}
                                 contentInset={{ left: 10, right: 10 }}
                                 numberOfTicks={10}
-                                formatLabel={(value) => `${value}g`}
+                                formatLabel={(value) => `${value}`}
                                 svg={{ fontSize: 10, fill: 'black' }}
                             />
                         </View>
                         :
-                        <View style={{ height: 380, width: 380, flexDirection: 'row', alignSelf: 'center' }}>
-                            <YAxis
-                                data={this.state.beverage}
-                                contentInset={{ top: 20, bottom: 20 }}
-                                svg={{
-                                    fill: 'grey',
-                                    fontSize: 10,
-                                }}
+                        <View>
+                            <View style={{ height: 350, width: 350, flexDirection: 'row', alignSelf: 'center' }}>
+                                <YAxis
+                                    data={this.state.beverage}
+                                    contentInset={{ top: 20, bottom: 20 }}
+                                    svg={{
+                                        fill: 'grey',
+                                        fontSize: 10,
+                                    }}
+                                    numberOfTicks={10}
+                                    formatLabel={(value) => `${value}g`}//change x axis to time stamps maybe :D
+                                />
+                                <LineChart
+                                    style={{ flex: 1, marginLeft: 16 }}
+                                    data={this.state.beverage}
+                                    svg={{ stroke: 'rgb(134, 65, 244)' }}
+                                    contentInset={{ top: 20, bottom: 20 }}
+                                >
+                                    <Grid />
+                                </LineChart>
+                            </View>
+                            <XAxis
+                                style={{ marginHorizontal: -10 }}
+                                data={this.state.timestamps}
+                                contentInset={{ left: 10, right: 10 }}
                                 numberOfTicks={10}
-                                formatLabel={(value) => `${value}g`}//change x axis to time stamps maybe :D
+                                formatLabel={(value) => `${value}`}
+                                svg={{ fontSize: 10, fill: 'black' }}
                             />
-                            <LineChart
-                                style={{ flex: 1, marginLeft: 16 }}
-                                data={this.state.beverage}
-                                svg={{ stroke: 'rgb(134, 65, 244)' }}
-                                contentInset={{ top: 20, bottom: 20 }}
-                            >
-                                <Grid />
-                            </LineChart>
                         </View>
                     }
+                    <View style={{alignItems: 'center', marginBottom: 10}}>
+                        <Text style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>minutes ago</Text>
+
+                    </View>
                      <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                         <TouchableOpacity onPress={() => {this.setState({chartFormat: "beverage"})}}>
                             <View style={{backgroundColor: 'orange', borderRadius: 10}}>
@@ -357,7 +371,7 @@ const styles = StyleSheet.create({
     title: {
         justifyContent: 'flex-start',
         fontSize: 24,
-        marginBottom: 15
+        marginBottom: 5
     },
     selectBeverage: {
         marginBottom: 15
