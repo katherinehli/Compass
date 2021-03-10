@@ -23,8 +23,10 @@ export default class HomeScreen extends React.Component {
             beverage: [],
             timestamps: [],
             current_amount: null,
+            current_amount_bev: null,
             current_pace: null,
             limit_amount: null,
+            limit_amount_bev: null,
             max_pace: null,
             amountPercent: null,
             pacePercent: null
@@ -183,6 +185,9 @@ export default class HomeScreen extends React.Component {
         let current_amount = this.retrieveDocumentName("current_amount", taro0).current_amount
         let limit_amount = this.retrieveDocumentName("limit_amount", taro0).limit_amount
 
+        let current_amount_bev = this.retrieveDocumentName("current_amount_bev", taro0).current_amount_bev
+        let limit_amount_bev = this.retrieveDocumentName("limit_amount_bev", taro0).limit_amount_bev
+
         let amountPercent = current_amount/limit_amount
 
         let current_pace = this.retrieveDocumentName("current_pace", taro0).current_pace
@@ -194,6 +199,8 @@ export default class HomeScreen extends React.Component {
         this.setState({
             current_amount: current_amount,
             limit_amount: limit_amount,
+            current_amount_bev: current_amount_bev,
+            limit_amount_bev: limit_amount_bev,
             current_pace: current_pace,
             max_pace: max_pace,
             amountPercent: amountPercent*100,
@@ -223,19 +230,36 @@ export default class HomeScreen extends React.Component {
                         {/* <Text>press this to console.warn taro</Text> */}
                     </TouchableOpacity>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around', padding: 15}}>
-                        <View>
-                            <Text style={{marginBottom: 15}}>Alcohol consumed</Text>
-                            <ProgressCircle
-                                percent={this.state.amountPercent}
-                                radius={60}
-                                borderWidth={15}
-                                color="pink"
-                                shadowColor="#999"
-                                bgColor="#fff"
-                            >
-                                <Text style={{ fontSize: 18, textAlign: 'center' }}>{this.state.current_amount}/{this.state.limit_amount}g total</Text>
-                            </ProgressCircle>
-                        </View>
+                        {
+                            (this.state.chartFormat == "pureAlc")?
+                            <View>
+                                <Text style={{marginBottom: 15}}>Alcohol consumed</Text>
+                                <ProgressCircle
+                                    percent={this.state.amountPercent}
+                                    radius={60}
+                                    borderWidth={15}
+                                    color="pink"
+                                    shadowColor="#999"
+                                    bgColor="#fff"
+                                >
+                                    <Text style={{ fontSize: 18, textAlign: 'center' }}>{this.state.current_amount}/{this.state.limit_amount}g total</Text>
+                                </ProgressCircle>
+                            </View>
+                            :
+                            <View>
+                                <Text style={{marginBottom: 15}}>Beverage consumed</Text>
+                                <ProgressCircle
+                                    percent={this.state.amountPercent}
+                                    radius={60}
+                                    borderWidth={15}
+                                    color="pink"
+                                    shadowColor="#999"
+                                    bgColor="#fff"
+                                >
+                                    <Text style={{ fontSize: 18, textAlign: 'center' }}>{this.state.current_amount_bev}/{this.state.limit_amount_bev}g total</Text>
+                                </ProgressCircle>
+                            </View>
+                        }
                         <View>
                             <Text style={{marginBottom: 15}}>Pace of consumption</Text>
                             <ProgressCircle
