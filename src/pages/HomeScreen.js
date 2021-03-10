@@ -278,11 +278,11 @@ export default class HomeScreen extends React.Component {
                         <View style={{flexDirection: 'row', alignItems: 'center' }}>
                             <Text>Estimated </Text>
                             <Text style={{fontSize: 40}}>{this.state.timeUntilLimit} minutes</Text>
-                            <Text> until limit reached.</Text>
+                            <Text> until limit</Text>
                         </View>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <Text>Will sober up at </Text>
-                            <Text style={{fontSize: 40}}>{this.state.sober_hour}:{this.state.sober_minute} </Text>
+                            <Text style={{fontSize: 40}}>{this.state.sober_hour}:{this.state.sober_minute}</Text>
                             <Text> ({this.state.sober_day})</Text>
                         </View>
                     </View>
