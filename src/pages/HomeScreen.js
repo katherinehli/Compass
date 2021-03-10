@@ -342,7 +342,7 @@ export default class HomeScreen extends React.Component {
                         </View>
                     }
                     <View style={{alignItems: 'center', marginBottom: 10}}>
-                        <Text style={{fontStyle: 'italic', justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>minutes ago</Text>
+                        <Text style={{fontStyle: 'italic', justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>minutes of drinking</Text>
 
                     </View>
                      <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
