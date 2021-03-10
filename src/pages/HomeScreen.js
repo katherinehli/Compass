@@ -5,7 +5,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import { db } from '../../firebaseConfig';
 import ProgressCircle from 'react-native-progress-circle'
 import { LineChart, YAxis, XAxis, Grid } from 'react-native-svg-charts'
-import moment from 'moment';
+import moment, { max } from 'moment';
 // import { AnimatedGaugeProgress, GaugeProgress } from 'react-native-simple-gauge';
 
 import AlcoholVisualBar from '../components/AlcoholVisualBar'
@@ -22,6 +22,12 @@ export default class HomeScreen extends React.Component {
             pureAlc: [],
             beverage: [],
             timestamps: [],
+            current_amount: null,
+            current_pace: null,
+            limit_amount: null,
+            max_pace: null,
+            amountPercent: null,
+            pacePercent: null
         }
     }
 
@@ -39,6 +45,7 @@ export default class HomeScreen extends React.Component {
             beverage: await this.retrieveBeverage(),
             timestamps: await this.formatTimestamps(),
         })
+        this.retrieveLiquorLimits()
         console.warn(this.state)
     }
 
@@ -57,7 +64,7 @@ export default class HomeScreen extends React.Component {
         for(var o in data) {
             dataArray.push(data[o]);
         }
-        console.warn(dataArray)
+        // console.warn(dataArray)
 
         for(i = 0; i < dataArray.length; i++){
             if(variable in dataArray[i]){
@@ -127,13 +134,6 @@ export default class HomeScreen extends React.Component {
 
         // var timestamps = [];
         var pureAlc = [];
-        // for(i = 0; i < dataArray.length; i++) {
-        //     if("min_from_start" in dataArray[i]){
-        //         // console.warn(dataArray[i].min_from_start)
-        //         timestamps.push(dataArray[i].min_from_start)
-        //     }
-        // }
-
         for(i = 0; i < dataArray.length; i++) {
             if('accumulated_amount_a' in dataArray[i]){
                 // console.warn(dataArray[i].accumulated_amount_a)
@@ -163,6 +163,32 @@ export default class HomeScreen extends React.Component {
         return beverage
     }
 
+    async retrieveLiquorLimits () {
+        console.warn("hi in retrieve retreive liquor limits")
+        let taro = await db.ref(`/user_data`).get();
+        let taro0 = JSON.parse(JSON.stringify(taro))
+        console.warn(taro0)
+        let current_amount = this.retrieveDocumentName("current_amount", taro0).current_amount
+        let limit_amount = this.retrieveDocumentName("limit_amount", taro0).limit_amount
+
+        let amountPercent = current_amount/limit_amount
+
+        let current_pace = this.retrieveDocumentName("current_pace", taro0).current_pace
+        let max_pace = this.retrieveDocumentName("max_pace", taro0).max_pace
+
+        let pacePercent = current_pace/max_pace
+
+        console.warn(amountPercent, pacePercent)
+        this.setState({
+            current_amount: current_amount,
+            limit_amount: limit_amount,
+            current_pace: current_pace,
+            max_pace: max_pace,
+            amountPercent: amountPercent*100,
+            pacePercent: pacePercent*100
+        })
+    }
+
     render() {
         // console.warn("we are in homescreen");
         return(
@@ -189,33 +215,33 @@ export default class HomeScreen extends React.Component {
                         <View>
                             <Text>Liquor consumed</Text>
                             <ProgressCircle
-                                percent={30}
+                                percent={this.state.amountPercent}
                                 radius={60}
                                 borderWidth={15}
                                 color="pink"
                                 shadowColor="#999"
                                 bgColor="#fff"
                             >
-                                <Text style={{ fontSize: 18 }}>{'557/615g'}</Text>
+                                <Text style={{ fontSize: 18 }}>{this.state.current_amount}/{this.state.limit_amount}g</Text>
                             </ProgressCircle>
                         </View>
                         <View>
                             <Text>Pace of consumption</Text>
                             <ProgressCircle
-                                percent={30}
+                                percent={this.state.pacePercent}
                                 radius={60}
                                 borderWidth={15}
                                 color="pink"
                                 shadowColor="#999"
                                 bgColor="#fff"
                             >
-                                <Text style={{ fontSize: 18 }}>{'81/75g'}</Text>
+                                <Text style={{ fontSize: 18 }}>{this.state.current_pace}/{this.state.max_pace}g</Text>
                             </ProgressCircle>
                         </View>
                     </View>
                     
                     <Text>Will sober up at {this.state.sober_hour}:{this.state.sober_minute} ({this.state.sober_day})</Text>
-                    {/* <TouchableOpacity onPress={() => this.retrieveBeverage()}>
+                    <TouchableOpacity onPress={() => this.retrieveBeverage()}>
                         <Text>Press to console.warn beverage stuff</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.formatTimestamps()}>
@@ -229,7 +255,7 @@ export default class HomeScreen extends React.Component {
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.tempFunctionToCallDocumentName()}>
                         <Text>Press to retrieveDocumentName</Text>
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                         <TouchableOpacity onPress={() => {this.setState({chartFormat: "beverage"})}}>
                             <View style={{backgroundColor: 'orange', borderRadius: 10}}>
