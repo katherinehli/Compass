@@ -44,6 +44,7 @@ export default class HomeScreen extends React.Component {
             pureAlc: await this.retrievePureAlc(),
             beverage: await this.retrieveBeverage(),
             timestamps: await this.formatTimestamps(),
+            timeUntilLimit: await this.retrieveTimeUntilLimit(),
         })
         this.retrieveLiquorLimits()
         console.warn(this.state)
@@ -72,6 +73,16 @@ export default class HomeScreen extends React.Component {
                 return dataArray[i]
             }
         }
+    }
+
+    async retrieveTimeUntilLimit (){
+        console.warn("hi in retrievetimeuntillimit")
+        let taro = await db.ref(`/user_data`).get();
+        let taro0 = JSON.parse(JSON.stringify(taro))
+        let estimated_time_left = this.retrieveDocumentName('estimated_time_left', taro0).estimated_time_left
+        console.warn(estimated_time_left)
+        return estimated_time_left
+        
     }
 
     async retrieveSoberTime () {
@@ -211,9 +222,9 @@ export default class HomeScreen extends React.Component {
                     <TouchableOpacity onPress={() => this.retrieveSoberTime()}>
                         {/* <Text>press this to console.warn taro</Text> */}
                     </TouchableOpacity>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-around', padding: 15}}>
                         <View>
-                            <Text>Liquor consumed</Text>
+                            <Text style={{marginBottom: 15}}>Liquor consumed</Text>
                             <ProgressCircle
                                 percent={this.state.amountPercent}
                                 radius={60}
@@ -222,11 +233,11 @@ export default class HomeScreen extends React.Component {
                                 shadowColor="#999"
                                 bgColor="#fff"
                             >
-                                <Text style={{ fontSize: 18 }}>{this.state.current_amount}/{this.state.limit_amount}g</Text>
+                                <Text style={{ fontSize: 18, textAlign: 'center' }}>{this.state.current_amount}/{this.state.limit_amount}g total</Text>
                             </ProgressCircle>
                         </View>
                         <View>
-                            <Text>Pace of consumption</Text>
+                            <Text style={{marginBottom: 15}}>Pace of consumption</Text>
                             <ProgressCircle
                                 percent={this.state.pacePercent}
                                 radius={60}
@@ -235,13 +246,23 @@ export default class HomeScreen extends React.Component {
                                 shadowColor="#999"
                                 bgColor="#fff"
                             >
-                                <Text style={{ fontSize: 18 }}>{this.state.current_pace}/{this.state.max_pace}g</Text>
+                                <Text style={{ fontSize: 18, textAlign: 'center' }}>{this.state.current_pace}/{this.state.max_pace}g per hour</Text>
                             </ProgressCircle>
                         </View>
                     </View>
-                    
-                    <Text>Will sober up at {this.state.sober_hour}:{this.state.sober_minute} ({this.state.sober_day})</Text>
-                    <TouchableOpacity onPress={() => this.retrieveBeverage()}>
+                    <View style={{alignContent: 'center', justifyContent: 'center', alignItems: 'center'}}>
+                        <View style={{flexDirection: 'row', alignItems: 'center' }}>
+                            <Text>Estimated </Text>
+                            <Text style={{fontSize: 40}}>{this.state.timeUntilLimit} minutes</Text>
+                            <Text> until limit reached.</Text>
+                        </View>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Text>Will sober up at </Text>
+                            <Text style={{fontSize: 40}}>{this.state.sober_hour}:{this.state.sober_minute} </Text>
+                            <Text> ({this.state.sober_day})</Text>
+                        </View>
+                    </View>
+                    {/* <TouchableOpacity onPress={() => this.retrieveBeverage()}>
                         <Text>Press to console.warn beverage stuff</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.formatTimestamps()}>
@@ -255,19 +276,7 @@ export default class HomeScreen extends React.Component {
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.tempFunctionToCallDocumentName()}>
                         <Text>Press to retrieveDocumentName</Text>
-                    </TouchableOpacity>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                        <TouchableOpacity onPress={() => {this.setState({chartFormat: "beverage"})}}>
-                            <View style={{backgroundColor: 'orange', borderRadius: 10}}>
-                                <Text style={{padding: 10}}>Beverage amount</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {this.setState({chartFormat: "pureAlc"})}}>
-                            <View style={{backgroundColor: 'orange', borderRadius: 10}}>
-                                <Text style={{padding: 10}}>Alcohol amount</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                    </TouchableOpacity> */}
                     {
                         (this.state.chartFormat == "pureAlc")?
                         <View>
@@ -291,14 +300,14 @@ export default class HomeScreen extends React.Component {
                                     <Grid />
                                 </LineChart>
                             </View>
-                            {/* <XAxis
+                            <XAxis
                                 style={{ marginHorizontal: -10 }}
                                 data={this.state.timestamps}
                                 contentInset={{ left: 10, right: 10 }}
                                 numberOfTicks={10}
                                 formatLabel={(value) => `${value}g`}
                                 svg={{ fontSize: 10, fill: 'black' }}
-                            /> */}
+                            />
                         </View>
                         :
                         <View style={{ height: 380, width: 380, flexDirection: 'row', alignSelf: 'center' }}>
@@ -322,6 +331,18 @@ export default class HomeScreen extends React.Component {
                             </LineChart>
                         </View>
                     }
+                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                        <TouchableOpacity onPress={() => {this.setState({chartFormat: "beverage"})}}>
+                            <View style={{backgroundColor: 'orange', borderRadius: 10}}>
+                                <Text style={{padding: 10}}>Beverage amount</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {this.setState({chartFormat: "pureAlc"})}}>
+                            <View style={{backgroundColor: 'orange', borderRadius: 10}}>
+                                <Text style={{padding: 10}}>Alcohol amount</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </SafeAreaView>
         )
