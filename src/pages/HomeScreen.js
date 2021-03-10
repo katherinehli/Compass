@@ -303,7 +303,7 @@ export default class HomeScreen extends React.Component {
                             <XAxis
                                 style={{ marginHorizontal: -10 }}
                                 data={this.state.timestamps}
-                                contentInset={{ left: 10, right: 10 }}
+                                contentInset={{ left: 70, right: 25 }}
                                 numberOfTicks={10}
                                 formatLabel={(value) => `${value}`}
                                 svg={{ fontSize: 10, fill: 'black' }}
@@ -334,7 +334,7 @@ export default class HomeScreen extends React.Component {
                             <XAxis
                                 style={{ marginHorizontal: -10 }}
                                 data={this.state.timestamps}
-                                contentInset={{ left: 10, right: 10 }}
+                                contentInset={{ left: 70, right: 25 }}
                                 numberOfTicks={10}
                                 formatLabel={(value) => `${value}`}
                                 svg={{ fontSize: 10, fill: 'black' }}
