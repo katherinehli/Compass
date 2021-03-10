@@ -9,40 +9,56 @@ import ProgressCircle from 'react-native-progress-circle'
 import AlcoholVisualBar from '../components/AlcoholVisualBar'
 
 export default class HomeScreen extends React.Component {
-    state = {
-        selected: null,
+    constructor(props){
+        super(props)
+        this.state = {
+            selected: null,
+            sober_day: null,
+            sober_hour: null,
+            sober_minute: null
+        }
+    }
+
+    async componentDidMount() {
+        let taro = await db.ref(`/user_data`).get();
+        let taro0 = JSON.parse(JSON.stringify(taro))
+        let day = taro0["-MVOrR5FhWl23Gg0YGTb"]['sober_day']
+        let hour = taro0["-MVOrR41SLpwYDWSJoWV"]['sober_hour']
+        let minute = taro0["-MVOrR4iG2b2ABITxIOG"]['sober_minute']
+        this.setState({
+            sober_day: day,
+            sober_hour: hour,
+            sober_minute: minute
+        })
     }
 
     selectBeverage(beverage) {
-        // console.warn("selecting", beverage);
         this.setState({selected: beverage})
     }
 
-    flattenObject = (obj) => {
-        const flattened = {}
-      
-        Object.keys(obj).forEach((key) => {
-          if (typeof obj[key] === 'object' && obj[key] !== null) {
-            Object.assign(flattened, this.flattenObject(obj[key]))
-            console.warn("continue flattening")
-          } else {
-            flattened[key] = obj[key]
-            console.warn("finished flattening")
-          }
-        })
-      
-        return flattened
-      }
-
     async retrieveSoberTime () {
+        console.warn("hi in retrieve sober time")
         let taro = await db.ref(`/user_data`).get();
-        console.warn("taro is: ", taro);
-        let hour = this.flattenObject(taro)
-        console.warn(hour)
+        let taro0 = JSON.parse(JSON.stringify(taro))
+        let hour = taro0["-MVOrR41SLpwYDWSJoWV"]['sober_hour']
+        let minute = taro0["-MVOrR4iG2b2ABITxIOG"]['sober_minute']
+        console.warn(`${hour}:${minute}`)
+        return `${hour}:${minute}`
+    }
+
+    async retrieveSoberDay () {
+        console.warn("hi in retrieve sober day")
+        let taro = await db.ref(`/user_data`).get();
+        let taro0 = JSON.parse(JSON.stringify(taro))
+        let day = taro0["-MVOrR5FhWl23Gg0YGTb"]['sober_day']
+        console.warn(`${day}`)
+        return day
     }
 
     render() {
         // console.warn("we are in homescreen");
+        let sober_time = JSON.stringify(this.retrieveSoberTime());
+        let sober_day = JSON.stringify(this.retrieveSoberDay());
         return(
             <SafeAreaView style={styles.container}>
                 <View style={{ alignContent: 'center', justifyContent: 'center', padding: 10}}>
@@ -61,14 +77,14 @@ export default class HomeScreen extends React.Component {
                         </TouchableOpacity>
                     </View>
                     <TouchableOpacity onPress={() => this.retrieveSoberTime()}>
-                        <Text>press this to conscole.warn taro</Text>
+                        <Text>press this to console.warn taro</Text>
                     </TouchableOpacity>
                     <Text>Liquor consumed</Text>
                     <ProgressCircle
                         percent={30}
                         radius={60}
                         borderWidth={15}
-                        color="#3399FF"
+                        color="pink"
                         shadowColor="#999"
                         bgColor="#fff"
                     >
@@ -80,23 +96,13 @@ export default class HomeScreen extends React.Component {
                         percent={30}
                         radius={60}
                         borderWidth={15}
-                        color="#3399FF"
+                        color="pink"
                         shadowColor="#999"
                         bgColor="#fff"
                     >
                         <Text style={{ fontSize: 18 }}>{'81/75g'}</Text>
                     </ProgressCircle>
-                    {/* <AnimatedGaugeProgress
-                        size={200}
-                        width={15}
-                        fill={100}
-                        rotation={90}
-                        cropDegree={90}
-                        tintColor="#4682b4"
-                        delay={0}
-                        backgroundColor="#b0c4de"
-                        stroke={[2, 2]} //For a equaly dashed line
-                        strokeCap="circle" /> */}
+                    <Text>Will sober up at {this.state.sober_hour}:{this.state.sober_minute} ({this.state.sober_day})</Text>
                 </View>
             </SafeAreaView>
         )
