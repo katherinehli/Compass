@@ -28,9 +28,9 @@ export default class HomeScreen extends React.Component {
     async componentDidMount() {
         let taro = await db.ref(`/user_data`).get();
         let taro0 = JSON.parse(JSON.stringify(taro))
-        let day = taro0["-MVOrR5FhWl23Gg0YGTb"]['sober_day']
-        let hour = taro0["-MVOrR41SLpwYDWSJoWV"]['sober_hour']
-        let minute = taro0["-MVOrR4iG2b2ABITxIOG"]['sober_minute']
+        let day = await this.retrieveSoberDay()
+        let hour = await this.retrieveDocumentName('sober_hour', taro0).sober_hour
+        let minute = await this.retrieveDocumentName('sober_minute', taro0).sober_minute
         this.setState({
             sober_day: day,
             sober_hour: hour,
@@ -46,12 +46,33 @@ export default class HomeScreen extends React.Component {
         this.setState({selected: beverage})
     }
 
+    async tempFunctionToCallDocumentName(){
+        let taro = await db.ref(`/user_data`).get();
+        let taro0 = JSON.parse(JSON.stringify(taro))
+        this.retrieveDocumentName("sober_hour", taro0)
+    }
+
+    retrieveDocumentName(variable, data){
+        var dataArray = []; //extract the values from the data
+        for(var o in data) {
+            dataArray.push(data[o]);
+        }
+        console.warn(dataArray)
+
+        for(i = 0; i < dataArray.length; i++){
+            if(variable in dataArray[i]){
+                console.warn(dataArray[i])
+                return dataArray[i]
+            }
+        }
+    }
+
     async retrieveSoberTime () {
         console.warn("hi in retrieve sober time")
         let taro = await db.ref(`/user_data`).get();
         let taro0 = JSON.parse(JSON.stringify(taro))
-        let hour = taro0["-MVOrR41SLpwYDWSJoWV"]['sober_hour']
-        let minute = taro0["-MVOrR4iG2b2ABITxIOG"]['sober_minute']
+        let hour = this.retrieveDocumentName('sober_hour', taro0).sober_hour
+        let minute = this.retrieveDocumentName('sober_minute', taro0).sober_minute
         console.warn(`${hour}:${minute}`)
         return `${hour}:${minute}`
     }
@@ -60,7 +81,7 @@ export default class HomeScreen extends React.Component {
         console.warn("hi in retrieve sober day")
         let taro = await db.ref(`/user_data`).get();
         let taro0 = JSON.parse(JSON.stringify(taro))
-        let day = taro0["-MVOrR5FhWl23Gg0YGTb"]['sober_day']
+        let day = this.retrieveDocumentName('sober_day', taro0).sober_day
         console.warn(`${day}`)
         return day
     }
@@ -194,15 +215,21 @@ export default class HomeScreen extends React.Component {
                     </View>
                     
                     <Text>Will sober up at {this.state.sober_hour}:{this.state.sober_minute} ({this.state.sober_day})</Text>
-                    {/* <TouchableOpacity onPress={() => this.retrievePureAlc()}>
-                        <Text>Press to console.warn pure alc stuff</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.retrieveBeverage()}>
+                    {/* <TouchableOpacity onPress={() => this.retrieveBeverage()}>
                         <Text>Press to console.warn beverage stuff</Text>
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.formatTimestamps()}>
                         <Text>Press to console.warn timestamp stuff</Text>
                     </TouchableOpacity> 
+                    <TouchableOpacity onPress={() => this.retrieveLiquorLimits()}>
+                        <Text>Press to console.warn dashboard stuff</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => console.warn(this.state)}>
+                        <Text>Press to console.warn the current state</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.tempFunctionToCallDocumentName()}>
+                        <Text>Press to retrieveDocumentName</Text>
+                    </TouchableOpacity> */}
                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                         <TouchableOpacity onPress={() => {this.setState({chartFormat: "beverage"})}}>
                             <View style={{backgroundColor: 'orange', borderRadius: 10}}>
@@ -238,14 +265,14 @@ export default class HomeScreen extends React.Component {
                                     <Grid />
                                 </LineChart>
                             </View>
-                            <XAxis
+                            {/* <XAxis
                                 style={{ marginHorizontal: -10 }}
                                 data={this.state.timestamps}
                                 contentInset={{ left: 10, right: 10 }}
                                 numberOfTicks={10}
                                 formatLabel={(value) => `${value}g`}
                                 svg={{ fontSize: 10, fill: 'black' }}
-                            />
+                            /> */}
                         </View>
                         :
                         <View style={{ height: 380, width: 380, flexDirection: 'row', alignSelf: 'center' }}>
